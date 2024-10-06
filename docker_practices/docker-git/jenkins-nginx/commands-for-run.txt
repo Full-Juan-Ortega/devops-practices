@@ -1,0 +1,9 @@
+docker compose build
+docker compose up -d
+docker exec nginx curl 172.20.0.3:8080
+
+Login en el UI : 
+user : juan2
+pass : juan2
+#verificar red
+docker inspect $(docker ps -q) | grep -i ipaddress

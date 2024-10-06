@@ -1,0 +1,14 @@
+Entregables del ejercicio 01:
+1)DockerFile arreglado y con la variable de entorno API_URL.
+ ./Dockerfile
+2)Registry con la imagen subida.
+ https://hub.docker.com/repository/docker/juanortegait/backend-node-app/general
+3)Comando para buildear la imagen y pasos a seguir para subir la imagen al registry.
+Buildear : 
+ docker build -t backend-node-app .
+ docker run -dti -p 3001:3001 juanortegait/backend-node-app:latest
+Subir a docker hub: 
+ docker login
+ docker image tag backend-node-app juanortegait/backend-node-app:latest
+#Para pushear me pedia asignarle un nombre a la imagen
+ docker push juanortegait/backend-node-app:latest.
