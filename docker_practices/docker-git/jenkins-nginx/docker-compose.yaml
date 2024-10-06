@@ -1,0 +1,32 @@
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    #instalar ping
+    command: /bin/sh -c "apt-get update && apt-get install -y iputils-ping curl && tail -f /dev/null"
+    networks:
+      - mynetwork
+    ports:
+      - "8080:80"
+
+  jenkins:
+    image: jenkins/jenkins:latest
+    container_name: jenkins   
+    networks :
+      - mynetwork
+    ports:
+      - "9000:8080"
+      - "50000:50000"
+    
+    #desabilita la seguridad y ingresa automaticamente pero como anonymus.
+    #environment:
+      #- JENKINS_ADMIN_ID=admin
+      #- JENKINS_ADMIN_PASSWORD=admin123
+      #- JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+    
+    volumes: 
+     - ./jenkins_home:/var/jenkins_home    
+  
+networks:
+  mynetwork:
