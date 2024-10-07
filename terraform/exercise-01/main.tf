@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "ngnix-server" {
-  ami           = "ami-044b12c7b0bf3feb8"
+  ami           = "ami-0866a3c8686eaeeba"
   instance_type = "t3.micro"
   tags = {
     Name = "ngnix-server"
@@ -56,4 +56,21 @@ resource "aws_security_group" "nginx-sg-juan" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+//practicing outputs
+
+output "ip-address" {
+  description = "The public IP address of the web server"
+  value = aws_instance.ngnix-server.public_ip
+}
+
+output "ssh-command" {
+  description = "The command to connect to the web server"
+  value = "ssh -i ~/.ssh/nginx-server.pem ubuntu@${aws_instance.ngnix-server.public_ip}"
+}
+
+output "bucket-name" {
+  description = "The name of the S3 bucket"
+  value = aws_s3_bucket.example897651321564.bucket
 }
