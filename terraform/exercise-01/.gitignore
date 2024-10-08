@@ -1,6 +1,8 @@
 # Local .terraform directory
 .terraform/
 
+# Module .terraform directory
+modules/.terraform
 # Terraform state files
 *.tfstate
 *.tfstate.*
