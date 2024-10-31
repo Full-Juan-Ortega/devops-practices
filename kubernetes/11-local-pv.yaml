@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: juan-namespace
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-pv
+  namespace: juan-namespace
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: manual
+  local:
+    path: /home/juan/pruebas-varias # Ruta en el nodo donde se almacenarán los datos
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - minikube
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: juan-namespace
+  name: local-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: manual
+  resources:
+    requests:
+      storage: 500Mi
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: juan-namespace
+  name: nginx-local
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: local-storage
+  volumes:
+    - name: local-storage
+      persistentVolumeClaim:
+        claimName: local-pvc
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: juan-namespace
+  name: alpine-local
+spec:
+  containers:
+    - name: alpine
+      image: alpine:latest
+      command: ["sleep", "36000"]
+      volumeMounts:
+        - mountPath: "/usr"
+          name: local-storage
+
+  volumes:
+    - name: local-storage
+      hostPath:
+        path: /home/juan/pruebas-varias/prueba-hostpath

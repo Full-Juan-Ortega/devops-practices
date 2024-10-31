@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: meta-basic-alpine
+spec:
+  containers:
+  - name: c-basic-alpine
+    image: alpine
+    args:
+    - sleep
+    - infinity
