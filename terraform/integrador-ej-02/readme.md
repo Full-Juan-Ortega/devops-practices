@@ -1,8 +1,8 @@
 
 
-#EJ 2 - Terraform:
+# EJ 2 - Terraform:
 
-##Consigna 
+## Consigna 
 
 Caso 2 - Implementecion de Terraform con estado remoto y migración de recursos
 El equipo quiere empezar a utilizar terraform, para esto necesita guardar el estado de terraform en AWS, entonces necesitaremos todos los componentes para guardar estos estados. El proceso debe ser documentado para poder replicarse en otras cuentas.
