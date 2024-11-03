@@ -1,0 +1,3 @@
+1) es normal que se desconecte la conexion a la ec2 cada rato?.(se pega la consola y tengo q abrir otra y volver a conectarme ssh)
+
+2) hay alguna forma para que no se pegue la consola conectada a ssh en el comando kubectl port-forward?.
