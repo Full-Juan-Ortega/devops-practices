@@ -7,10 +7,18 @@ Una vez realizado vamos a necesitar desplegar un jenkins (en el mismo minikube o
 interactuar con el cluster.
 Tambien opcionalmente necesitamos exponer el dashboard de recursos de Kubernetes, esto para poder observar las cargas y metricas.
 
+# RESUMEN :
+- Crear una ec2 , la clave ssh y el sg.
+- instalar docker
+- instalar minikube y kubectl.
+- archivos yaml para kubernetes. (servicio , deployment y volumen)
+- exponer el puerto para poder acceder publicamente a jenkins.
+- instalacion del dashboard de k8s (acceso local).
+
 # Proceso
 
-## Crear una ec2 e instalar minikube y docker.
-- pienso trabajar en una ec2 para instalar docker , minikube y un pod en base a una imagen de jenkins.
+## Requerimentos de minikube.
+upgradear la instancia a una t3.medium ( 2 cpu y 4 gb ram)
 
 ## Copiar archivos .yaml
 scp -i "ej-02.pem" -r /home/juan/integrador/3-ej/kubernetes ubuntu@ec2-34-229-103-35.compute-1.amazonaws.com:/home/ubuntu
@@ -53,11 +61,6 @@ Para acceder a Jenkins, puedes hacer un port-forward.
 - kubectl exec -it jenkins -- cat /var/jenkins_home/secrets/initialAdminPassword
 - kubectl port-forward svc/jenkins 30000:30000 --address 0.0.0.0 &
 - curl http://34.229.103.35:30000
-
-### Requerimentos de minikube.
-
-- upgradear la instancia.
-- ec2 para instalar minikube con caracteristicas : 
 
 
 ### dashboard de kubernetes.(no lo expuse publicamente)
