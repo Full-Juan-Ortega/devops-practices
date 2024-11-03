@@ -80,13 +80,12 @@ kubectl -n kubernetes-dashboard create token dashboard-admin
 
 
 ## Problemas inesperados : 
-La ec2 gratuita es muy chiquita para minikube ( mas de 1 procesador necesita )
-Me quede sin espacio de almacenamiento ( tenia solo 8 gb )
-Con 2 gb de ram , tampoco funciona , necesita mas asique dado que necesita 2gb de ram exclusivos para minikube.
-Cambie a una t3.medium con 4gb de ram.
-tuve que reinstalar minikube al cambiar las instancias. ( quedaba colgado en problemas relativos al hardware).
-Fui avanzando con comandos en el proceso del pod de jenkins, el tema es que al hacer el port forward se empezo a complicar.El port-forward no es como el de docker , no puede usarse fuera del port, para eso necesito un service
-Dado esto hare los .yaml.
-Hice una prueba con docker para ver el security group que configure funcionaba , y si funcionaba.
-Tuve unos problemitas con el port forward, podia acceder a jenkins localmente pero no por la ip publica. Tuve que usar el service y un port-forward.
+- La ec2 gratuita es muy chiquita para minikube ( mas de 1 procesador necesita ).
+- Me quede sin espacio de almacenamiento ( tenia solo 8 gb ).
+- Con 2 gb de ram , tampoco funciona , necesita mas asique dado que necesita 2gb de ram exclusivos para minikube.
+- Cambie a una t3.medium con 4gb de ram.
+- tuve que reinstalar minikube al cambiar las instancias. ( quedaba colgado en problemas relativos al hardware).
+- Fui avanzando con comandos en el proceso del pod de jenkins, el tema es que al hacer el port forward se empezo a complicar.El port-forward no es como el de docker , no puede usarse fuera del cluster, para eso necesito un service dado esto hare los .yaml.
+- Hice una prueba con docker para ver el security group que configure funcionaba , y si funcionaba.
+- Tuve unos problemitas con el port forward, podia acceder a jenkins localmente pero no por la ip publica. Tuve que usar el service y un port-forward.
 
