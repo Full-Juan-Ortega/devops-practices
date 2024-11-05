@@ -7,6 +7,6 @@ spec:
   ports:
     - port: 30000         # Puerto del servicio
       targetPort: 8080    # Puerto del contenedor
-      nodePort: 30000     # Especifica el puerto NodePort, opcional
+      nodePort: 30000     # puerto host.
   selector:
     app: jenkins

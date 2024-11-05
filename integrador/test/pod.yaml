@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jenkins-pod
+  labels:
+    app: jenkins
+spec:
+  containers:
+    - name: jenkins-container
+      image: jenkins/jenkins:lts  # Usa la imagen oficial de Jenkins
+      ports:
+        - containerPort: 8080     # Puerto donde Jenkins escucha en el contenedor

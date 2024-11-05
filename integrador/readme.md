@@ -1,6 +1,4 @@
-# Ej 03.
-
-Caso 3 - Depliegue de Minikube y Jenkins en AWS
+# Ejercicio 3 - Depliegue de Minikube y Jenkins en AWS
 Necesitaremos un minikube para administrar contenedores en la nube de AWS, para esto el equipo estaba pensando posibilidades de tipos
 de instancias para poder administrar la carga de trabajo de minikube.
 Una vez realizado vamos a necesitar desplegar un jenkins (en el mismo minikube o en una instancia diferente) y que este para poder
@@ -17,13 +15,21 @@ Tambien opcionalmente necesitamos exponer el dashboard de recursos de Kubernetes
 
 # Proceso
 
-## Requerimentos de minikube.
-upgradear la instancia a una t3.medium ( 2 cpu y 4 gb ram)
+## Ec2 y Requerimentos de minikube.
 
-## Copiar archivos .yaml
-scp -i "ej-02.pem" -r /home/juan/integrador/3-ej/kubernetes ubuntu@ec2-34-229-103-35.compute-1.amazonaws.com:/home/ubuntu
+* En el proceso de levantar la ec2 , levante primero una t2.micro.
+* Tuve un error relativo a que minikube necesitaba al menos 2 procesadores asique despues la upgradie a t3.small.
+* Luego me paso lo mismo con la ram asique verifique ne la documentacion oficial y termine utilizando una t3.medium.
+* Tuve que agrandar el espacio de almacenamiento que tenia la ec2.
+* Asigne una ip elastica a la ec2 para que sea siempre el mismo ip.
+
+Requerimentos :
+<https://minikube.sigs.k8s.io/docs/start/?arch=%2Fwindows%2Fx86-64%2Fstable%2F.exe+download>
+ 
+
 
 ## ssh
+Comandos que utilice para acceder via ssh a la ec2.
 cd integrador/3-ej
 ssh -i "ej-02.pem" ubuntu@ec2-34-229-103-35.compute-1.amazonaws.com
 
@@ -35,6 +41,8 @@ instalacion de docker
 - sudo usermod -aG docker $USER
 - newgrp docker
 
+### Security group.
+Cree la primer regla de entrada y la testie con un container de jenkins.
 docker run -d -p 8080:8080 --name jenkins -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts
 
 ### Instalacion de minikube.
@@ -44,8 +52,17 @@ docker run -d -p 8080:8080 --name jenkins -v jenkins_home:/var/jenkins_home jenk
 - sudo snap install kubectl --classic
 - sudo minikube get all
 
-### jenkins pod y exposicion publica.
+### Manifiestos yaml para kubernetes.
+Aqui estan los archivos .yaml de kubernetes.
+<https://github.com/Full-Juan-Ortega/devops-practices/tree/main/integrador/kubernetes>
 
+## Copiar archivos .yaml
+scp -i "ej-02.pem" -r /home/juan/integrador/3-ej/kubernetes ubuntu@ec2-34-229-103-35.compute-1.amazonaws.com:/home/ubuntu
+
+
+### jenkins pod y exposicion publica.
+Aca utilice un servicio nodeport y un port-forward para poder acceder a jenkins publicamente.
+Vi dos maneras de hacerlo ( con los yaml o con comandos con argumentos)
 1. Enfoque declarativo.(con archivos yaml)
 - cd kubernetes
 - kubectl apply -f .
@@ -53,31 +70,18 @@ docker run -d -p 8080:8080 --name jenkins -v jenkins_home:/var/jenkins_home jenk
 2. Enfoque imperativo.(comandos con argumentos)
 - kubectl run jenkins --image=jenkins/jenkins:lts --port=8080
 - kubectl port-forward pod/jenkins 8080:8080 (ver para que quede en segundo plano)
-
-Para acceder a Jenkins, puedes hacer un port-forward.
+.
 
 ### Config jenkins.
 
 - kubectl exec -it jenkins -- cat /var/jenkins_home/secrets/initialAdminPassword
 - kubectl port-forward svc/jenkins 30000:30000 --address 0.0.0.0 &
-- curl http://34.229.103.35:30000
 
 
 ### dashboard de kubernetes.(no lo expuse publicamente)
-1. Instalar el Dashboard
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
-2. Verificar la Instalación
-kubectl get pods -n kubernetes-dashboard
-3. Iniciar el Proxy de Kubernetes
-kubectl proxy
-4. Acceder al Dashboard
-http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
-5. Crear un Token de Acceso (Opcional, pero Recomendado)
-```
-kubectl create serviceaccount dashboard-admin -n kubernetes-dashboard
-kubectl create clusterrolebinding dashboard-admin-binding --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:dashboard-admin
-kubectl -n kubernetes-dashboard create token dashboard-admin
-```
+
+minikube dashboard
+
 
 
 
