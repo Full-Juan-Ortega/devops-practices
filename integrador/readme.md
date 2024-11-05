@@ -23,15 +23,15 @@ Tambien opcionalmente necesitamos exponer el dashboard de recursos de Kubernetes
 * Tuve que agrandar el espacio de almacenamiento que tenia la ec2.
 * Asigne una ip elastica a la ec2 para que sea siempre el mismo ip.
 
-Requerimentos :
+Requerimentos :  
 <https://minikube.sigs.k8s.io/docs/start/?arch=%2Fwindows%2Fx86-64%2Fstable%2F.exe+download>
  
 
 
 ## ssh
-Comandos que utilice para acceder via ssh a la ec2.
-cd integrador/3-ej
-ssh -i "ej-02.pem" ubuntu@ec2-34-229-103-35.compute-1.amazonaws.com
+Comandos que utilice para acceder via ssh a la ec2.  
+cd integrador/3-ej  
+ssh -i "ej-02.pem" ubuntu@ec2-34-229-103-35.compute-1.amazonaws.com  
 
 ### Instalacion de docker.
 instalacion de docker
@@ -42,7 +42,7 @@ instalacion de docker
 - newgrp docker
 
 ### Security group.
-Cree la primer regla de entrada y la testie con un container de jenkins.
+Cree la primer regla de entrada y la testie con un container de jenkins.  
 docker run -d -p 8080:8080 --name jenkins -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts
 
 ### Instalacion de minikube.
@@ -53,21 +53,22 @@ docker run -d -p 8080:8080 --name jenkins -v jenkins_home:/var/jenkins_home jenk
 - sudo minikube get all
 
 ### Manifiestos yaml para kubernetes.
-Aqui estan los archivos .yaml de kubernetes.
+Aqui estan los archivos .yaml de kubernetes.  
 <https://github.com/Full-Juan-Ortega/devops-practices/tree/main/integrador/kubernetes>
 
 ## Copiar archivos .yaml
+Copie los archivos yaml que cree en mi local a la ec2.  
 scp -i "ej-02.pem" -r /home/juan/integrador/3-ej/kubernetes ubuntu@ec2-34-229-103-35.compute-1.amazonaws.com:/home/ubuntu
 
 
 ### jenkins pod y exposicion publica.
-Aca utilice un servicio nodeport y un port-forward para poder acceder a jenkins publicamente.
-Vi dos maneras de hacerlo ( con los yaml o con comandos con argumentos)
-1. Enfoque declarativo.(con archivos yaml)
+Aca utilice un servicio nodeport y un port-forward para poder acceder a jenkins publicamente.  
+Vi dos maneras de hacerlo ( con los yaml o con comandos con argumentos)  
+1. Enfoque declarativo.(con archivos yaml)  
 - cd kubernetes
 - kubectl apply -f .
 - kubectl port-forward svc/jenkins 30000:8080 --address 0.0.0.0 &
-2. Enfoque imperativo.(comandos con argumentos)
+2. Enfoque imperativo.(comandos con argumentos)  
 - kubectl run jenkins --image=jenkins/jenkins:lts --port=8080
 - kubectl port-forward pod/jenkins 8080:8080 (ver para que quede en segundo plano)
 .
@@ -79,7 +80,7 @@ Vi dos maneras de hacerlo ( con los yaml o con comandos con argumentos)
 
 
 ### dashboard de kubernetes.(no lo expuse publicamente)
-
+Este comando te permite ingresar al dashboard de kubernetes atraves del navegador.  
 minikube dashboard
 
 
@@ -87,12 +88,11 @@ minikube dashboard
 
 
 ## Problemas inesperados : 
-- La ec2 gratuita es muy chiquita para minikube ( mas de 1 procesador necesita ).
-- Me quede sin espacio de almacenamiento ( tenia solo 8 gb ).
-- Con 2 gb de ram , tampoco funciona , necesita mas asique dado que necesita 2gb de ram exclusivos para minikube.
-- Cambie a una t3.medium con 4gb de ram.
-- tuve que reinstalar minikube al cambiar las instancias. ( quedaba colgado en problemas relativos al hardware).
-- Fui avanzando con comandos en el proceso del pod de jenkins, el tema es que al hacer el port forward se empezo a complicar.El port-forward no es como el de docker , no puede usarse fuera del cluster, para eso necesito un service dado esto hare los .yaml.
-- Hice una prueba con docker para ver el security group que configure funcionaba , y si funcionaba.
-- Tuve unos problemitas con el port forward, podia acceder a jenkins localmente pero no por la ip publica. Tuve que usar el service y un port-forward.
+- La ec2 gratuita es muy chiquita para minikube ( mas de 1 procesador necesita ).  
+- Me quede sin espacio de almacenamiento ( tenia solo 8 gb ).  
+- Con 2 gb de ram , tampoco funciona , necesita mas asique dado que necesita 2gb de ram exclusivos para minikube.  
+- Cambie a una t3.medium con 4gb de ram.  
+- tuve que reinstalar minikube al cambiar las instancias. ( quedaba colgado en problemas relativos al hardware).  
+- Hice una prueba con docker para ver el security group que configure funcionaba , y si funcionaba.  
+- La exposicion de un pod de minikube a una ip publica me parecio bastante compleja , tuve que hacer un nodeport + port-forward.
 
