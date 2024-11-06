@@ -20,12 +20,14 @@ user : juan
 password : 1234  
 
 ### conseguir los archivos de tf del caso 2.
-Para esto tuve que copiar solo la carpeta que necesitaba dentro del repositorio en el que habia guardado la carpeta del ejercicio2.
 
-git clone --no-checkout https://github.com/Full-Juan-Ortega/devops-practices.git
-git sparse-checkout init --cone
-git sparse-checkout set terraform/integrador-ej-02
-git checkout main
+Para esto use la auth via ssh de git.
+
+ssh-keygen -t ed25519 -C "juan.ortega.it@gmail.com"
+eval "$(ssh-agent -s)"
+ssh-add .ssh/id_ed25519
+cat ~/.ssh/id_ed25519.pub
+ssh -T git@github.com
 
 ### agregar el iam role y el s3.
 
