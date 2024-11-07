@@ -1,5 +1,5 @@
 resource "aws_iam_role" "vpc_s3_access_role" {
-  name = "VPC-S3-AccessRole"
+  name = "juan-vpc-S3-AccessRole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -17,7 +17,7 @@ resource "aws_iam_role" "vpc_s3_access_role" {
 }
 
 resource "aws_iam_policy" "vpc_s3_policy" {
-  name        = "VPC-S3-AccessPolicy"
+  name        = "juan-vpc-S3-AccessPolicy"
   description = "Policy to access VPC and S3 bucket node-app-backup"
   policy      = jsonencode({
     Version = "2012-10-17"
